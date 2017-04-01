@@ -16,15 +16,24 @@
 class Bubble {
     
 public:
-    void setup(ofFbo f, ofVec2f pos);
+    void setup(ofFbo f, ofVec2f pos, int id);
     void update();
     void draw();
     
     ofFbo fbo;
     vector<ofVec2f> tigerPoints;
-    vector<ofVec2f> speeds;
+    vector<float> speeds;
     vector<float> yPos;
     vector<float> radius;
-    ofTrueTypeFont myFont;        // font
+    vector<float> acceleration;
+    vector<float> wave;
+    vector<float> amplitude;
+    ofTrueTypeFont myFont;
 
+    ofEvent<int> onReach;
+    ofEvent<int> onDelete;
+    bool didNotify;
+    bool didDelete;
+    int bubbleId;
+    int startTime;
 };
