@@ -13,14 +13,20 @@
 #include "ofMain.h"
 
 #endif /* Bubble_hpp */
+
+// Settings
+static int kNotificateTime = 20;
+
 class Bubble {
     
 public:
-    void setup(ofFbo f, ofVec2f pos, int id);
+    Bubble();
+    ~Bubble();
+
+    void setup(ofPixels pixels, ofVec2f pos, int id);
     void update();
     void draw();
     
-    ofFbo fbo;
     vector<ofVec2f> tigerPoints;
     vector<float> speeds;
     vector<float> yPos;
@@ -28,6 +34,10 @@ public:
     vector<float> acceleration;
     vector<float> wave;
     vector<float> amplitude;
+    vector<float> smallAmplitudes;
+    vector<bool> noFills;
+    vector<ofColor> colors;
+
     ofTrueTypeFont myFont;
 
     ofEvent<int> onReach;
@@ -35,5 +45,5 @@ public:
     bool didNotify;
     bool didDelete;
     int bubbleId;
-    int startTime;
+    int startTime;    
 };
