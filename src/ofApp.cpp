@@ -4,7 +4,7 @@
 void ofApp::setup(){
     
     setting = &setting->sharedInstance();
-    fontSize = setting->getValue("FontSize");
+    fontSize = setting->getValue<int>("FontSize");
     
     // Framerate
     ofSetFrameRate(30);
@@ -16,7 +16,7 @@ void ofApp::setup(){
     createTime();
     
     // Create time
-    int tiltDuration = setting->getValue("TiltDuration");
+    int tiltDuration = setting->getValue<int>("TiltDuration");
     timer.setup(tiltDuration, 4);
     ofAddListener(timer.onCallbackTimer, this, &ofApp::onCallbackTimer);
     timer.fire();
@@ -154,7 +154,7 @@ void ofApp::createBubble(int bubbleId) {
         pixels = bubblePixels[8];
     }
 
-    int boxSize = setting->getValue("TimeCharaBoundingBox");
+    int boxSize = setting->getValue<int>("TimeCharaBoundingBox");
     ofVec2f pos = ofVec2f(bubbleId * boxSize, 0);
     
     if (bubbleId == 2) {

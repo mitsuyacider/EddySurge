@@ -4,4 +4,11 @@
     <TiltDuration>1500</TiltDuration>
     <BurstPosition>540</BurstPosition>
     <LoopDuration>16</LoopDuration>
+    <CircleDivision>10</CircleDivision>
+    <ReverseQuantity>false</ReverseQuantity>
+    <GridSpace>12</GridSpace>
+    <MinDispersion>-2</MinDispersion>
+    <MaxDispersion>2</MaxDispersion>
+    <InitialVelocity>1.5</InitialVelocity>
+
 </Setting>

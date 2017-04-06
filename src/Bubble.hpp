@@ -17,8 +17,6 @@
 
 #endif /* Bubble_hpp */
 
-// Settings
-
 class Bubble {
 
 public:
@@ -28,11 +26,12 @@ public:
     void setup(ofPixels pixels, ofVec2f pos, int id);
     void update();
     void draw();
+    void createRates(int total);
     int getCircleNum(int total, int index);
-    float getRate(int index);
     
     vector<ofVec2f> tigerPoints;
     vector<float> speeds;
+    vector<float> xPos;
     vector<float> yPos;
     vector<float> radius;
     vector<float> acceleration;
@@ -41,6 +40,7 @@ public:
     vector<float> smallAmplitudes;
     vector<bool> noFills;
     vector<ofColor> colors;
+    vector<int> rates;
     
     
     ofTrueTypeFont myFont;
@@ -53,5 +53,8 @@ public:
     int startTime;
     int burstPosition;
     int loopDuration;
+    int division;
+    
     AppSetting *setting;
+    
 };

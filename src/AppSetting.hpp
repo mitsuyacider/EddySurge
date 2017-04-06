@@ -35,7 +35,7 @@ public:
         return inst;
     }
     
-    int getValue(string param);
-    
+    template <typename T> T getValue(string param);
+    bool getBoolValue(string param);
     ofXml XML;
 };
