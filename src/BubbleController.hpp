@@ -23,7 +23,7 @@ public:
     BubbleController();
     ~BubbleController();
     
-    void setup();
+    void setup(ofVec2f pos);
     void update();
     void draw();
     void createTime();
@@ -42,6 +42,8 @@ public:
     vector<Bubble> bubbles;
     vector<ofPixels> bubblePixels;
     vector<ofImage>images;
+    
+    ofVec2f initialPos;
     
     int speed;
     int counter;

@@ -9,7 +9,8 @@
     <GridSpace>12</GridSpace>
     <MinDispersion>-2</MinDispersion>
     <MaxDispersion>2</MaxDispersion>
-    <InitialVelocity>1.5</InitialVelocity>
+    <InitialVelocityX>0</InitialVelocityX>
+    <InitialVelocityY>3.5</InitialVelocityY>
     <MinAcceleration>0.01</MinAcceleration>
     <MaxAcceleration>0.08</MaxAcceleration>
     <MinAmplitude>0.5</MinAmplitude>

@@ -54,7 +54,8 @@ public:
     int burstPosition;
     int loopDuration;
     int division;
-    float initialVelocity;
+    float v0y;
+    float v0x;
     
     AppSetting *setting;
     

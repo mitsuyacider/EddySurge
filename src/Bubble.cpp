@@ -105,7 +105,8 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
     int minAlpha = setting->getValue<int>("MinAlpha");
     int maxAlpha = setting->getValue<int>("MaxAlpha");
     
-    initialVelocity = setting->getValue<float>("InitialVelocity");
+    v0x = setting->getValue<float>("InitialVelocityX");
+    v0y = setting->getValue<float>("InitialVelocityY");
     
     int num = 1;
     
@@ -144,8 +145,8 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
             
             if (c == 255) {
                 // NOTE: If the current block pixel is text, add parameters to draw circle.
-                particlePositions.push_back(ofVec2f(x + ofRandom(minDispersion, maxDispersion) + pos.x ,y + ofRandom(minDispersion, maxDispersion)) + pos.y);
-                speeds.push_back(ofRandom(initialVelocity, initialVelocity + 1));
+                particlePositions.push_back(ofVec2f(x + ofRandom(minDispersion, maxDispersion) + pos.x ,y + ofRandom(minDispersion, maxDispersion) + pos.y));
+                speeds.push_back(ofRandom(v0y, v0y + 1));
                 radius.push_back(r);
                 acceleration.push_back(ofRandom(minAcceleration, maxAcceleration));
                 
@@ -204,7 +205,7 @@ void Bubble::draw() {
         ofVec3f p;
         float amp = smallAmplitudes[i];
         p.x = particlePositions[i].x - xPos[i];
-        p.y = particlePositions[i].y - yPos[i] + ofGetHeight();
+        p.y = particlePositions[i].y - yPos[i];
         
         
         
@@ -233,15 +234,16 @@ void Bubble::draw() {
         
         
         
-        
+        // NOTE: Update bubble position
         if (yPos[i] > burstPosition) {
             yPos[i] += speeds[i] + acceleration[i] * timeCount;
             xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp * acceleration[i] * timeCount;
         } else {
-            yPos[i] += initialVelocity;
+            yPos[i] += v0y;
             xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp;
         }
         
+        particlePositions[i].x += v0x;
         
         if (timeCount > loopDuration && !didNotify) {
             didNotify = true;

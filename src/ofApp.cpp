@@ -12,7 +12,7 @@ void ofApp::setup(){
     counter = 30;
     
     bubbleController = new BubbleController();
-    bubbleController->setup();
+    bubbleController->setup(ofVec2f(0, ofGetHeight()));
 }
 
 //--------------------------------------------------------------
@@ -52,5 +52,5 @@ void ofApp::loadImage() {
     
     if (counter > 360) {
         counter = 30;
-    }   
+    }
 }

@@ -20,7 +20,7 @@ BubbleController::~BubbleController() {
 
 
 //--------------------------------------------------------------
-void BubbleController::setup() {
+void BubbleController::setup(ofVec2f pos) {
     setting = &setting->sharedInstance();
     fontSize = setting->getValue<int>("FontSize");
     
@@ -39,6 +39,8 @@ void BubbleController::setup() {
     ofAddListener(timer.onCallbackTimer, this, &BubbleController::onCallbackTimer);
     timer.fire();
     
+    
+    initialPos = pos;
     createBubble(0);
 }
 
@@ -142,6 +144,9 @@ void BubbleController::createBubble(int bubbleId) {
     
     int boxSize = setting->getValue<int>("TimeCharaBoundingBox");
     ofVec2f pos = ofVec2f(bubbleId * boxSize, 0);
+    
+    pos.x += initialPos.x;
+    pos.y += initialPos.y;
     
     if (bubbleId == 2) {
         pos.x += 100;
