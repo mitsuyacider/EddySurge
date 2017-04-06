@@ -29,7 +29,7 @@ public:
     void createRates(int total);
     int getCircleNum(int total, int index);
     
-    vector<ofVec2f> tigerPoints;
+    vector<ofVec2f> particlePositions;
     vector<float> speeds;
     vector<float> xPos;
     vector<float> yPos;

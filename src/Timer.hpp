@@ -5,6 +5,7 @@
 //  Created by Mitstuya.WATANABE on 2017/04/03.
 //
 //
+#pragma once
 
 #ifndef Timer_hpp
 #define Timer_hpp

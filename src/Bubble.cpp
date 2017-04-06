@@ -21,8 +21,8 @@ Bubble::Bubble() {
 
 //--------------------------------------------------------------
 Bubble::~Bubble() {
-    tigerPoints.clear();
-    tigerPoints.shrink_to_fit();
+    particlePositions.clear();
+    particlePositions.shrink_to_fit();
     
     speeds.clear();
     speeds.shrink_to_fit();
@@ -144,7 +144,7 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
             
             if (c == 255) {
                 // NOTE: If the current block pixel is text, add parameters to draw circle.
-                tigerPoints.push_back(ofVec2f(x + ofRandom(minDispersion, maxDispersion) + pos.x ,y + ofRandom(minDispersion, maxDispersion)) + pos.y);
+                particlePositions.push_back(ofVec2f(x + ofRandom(minDispersion, maxDispersion) + pos.x ,y + ofRandom(minDispersion, maxDispersion)) + pos.y);
                 speeds.push_back(ofRandom(initialVelocity, initialVelocity + 1));
                 radius.push_back(r);
                 acceleration.push_back(ofRandom(minAcceleration, maxAcceleration));
@@ -191,7 +191,7 @@ void Bubble::draw() {
     int count = 0;
     int timeCount = (ofGetElapsedTimeMillis() / 1000) - startTime;
     
-    for(int i = 0; i < tigerPoints.size(); i++){
+    for(int i = 0; i < particlePositions.size(); i++){
         
         if (noFills[i]) {
             ofFill();
@@ -203,8 +203,8 @@ void Bubble::draw() {
         
         ofVec3f p;
         float amp = smallAmplitudes[i];
-        p.x = tigerPoints[i].x + xPos[i];
-        p.y = tigerPoints[i].y - yPos[i] + ofGetHeight();
+        p.x = particlePositions[i].x - xPos[i];
+        p.y = particlePositions[i].y - yPos[i] + ofGetHeight();
         
         
         
@@ -242,6 +242,7 @@ void Bubble::draw() {
             xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp;
         }
         
+        
         if (timeCount > loopDuration && !didNotify) {
             didNotify = true;
             // Notify
@@ -254,7 +255,7 @@ void Bubble::draw() {
         }
     }
     
-    if (count == tigerPoints.size() && !didDelete) {
+    if (count == particlePositions.size() && !didDelete) {
         didDelete = true;
         
         ofNotifyEvent(onDelete, bubbleId);
