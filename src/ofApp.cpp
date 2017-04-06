@@ -3,25 +3,31 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
+    setting = &setting->sharedInstance();
+    fontSize = setting->getValue("FontSize");
+    
     // Framerate
     ofSetFrameRate(30);
     
     // Font setting
-    myFont.load("font/Arial Black.ttf",  kFontSize, true, true, true, 0.3, 0);
+    myFont.load("font/Arial Black.ttf",  fontSize, true, true, true, 0.3, 0);
     
     // Create pixels
     createTime();
     
     // Create time
-    timer.setup(kDuration, 4);
+    int tiltDuration = setting->getValue("TiltDuration");
+    timer.setup(tiltDuration, 4);
     ofAddListener(timer.onCallbackTimer, this, &ofApp::onCallbackTimer);
     timer.fire();
     
     createBubble(0);
+    
+    bgImage.load("background/display_A_watch_00030.png");
+    counter = 30;
 }
 
 void ofApp::onCallbackTimer(int &cnt) {
-    printf("\ncount = %d", cnt);
     createBubble(cnt);
 }
 
@@ -31,11 +37,33 @@ void ofApp::update(){
     if (timer.currentCnt < 4) {
         timer.update();
     }
+    
+    stringstream fileName;
+    fileName << "background/display_A_watch_00";
+    
+    if (counter < 100) {
+        fileName << "0" << counter;
+    } else {
+        fileName << counter;
+    }
+    
+    fileName << ".png";
+    
+    bgImage.load(fileName.str());
+    
+    counter++;
+    
+    if (counter > 360) {
+        counter = 30;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(0, 0, 0);
+    
+    bgImage.draw(0, 0, 1920, 1080);
+//    images[counter].draw(0, 0, 1920, 1080);
     
     if (!timeBubbles.empty()) {
         vector<vector<Bubble *>> v2;
@@ -54,6 +82,7 @@ void ofApp::draw(){
     stringstream ss;
     ss << "framerate: " << ofToString(ofGetFrameRate(), 0);
     ofDrawBitmapString(ss.str(), ofGetWidth() / 2, ofGetHeight() / 2);
+    
 }
 
 
@@ -65,14 +94,13 @@ void ofApp::createTime() {
     int i = 0;
     while(!tempStr.empty()) {
         aChar = tempStr.substr(0, kCharBytes);
-        printf("\n%s", aChar.c_str());
         ofFbo f;
-        f.allocate(kFontSize, kFontSize, GL_RGBA);
+        f.allocate(fontSize, fontSize, GL_RGBA);
         
         f.begin();
         ofClear(0);
         ofSetColor(255);
-        myFont.drawString(aChar, 0, kFontSize);
+        myFont.drawString(aChar, 0, fontSize);
         f.end();
 
         ofPixels pixels;
@@ -126,8 +154,8 @@ void ofApp::createBubble(int bubbleId) {
         pixels = bubblePixels[8];
     }
 
-    
-    ofVec2f pos = ofVec2f(bubbleId * kTimeBoundingBox, 0);
+    int boxSize = setting->getValue("TimeCharaBoundingBox");
+    ofVec2f pos = ofVec2f(bubbleId * boxSize, 0);
     
     if (bubbleId == 2) {
         pos.x += 100;

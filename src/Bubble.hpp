@@ -6,19 +6,21 @@
 //
 //
 
+#pragma once
+
 #ifndef Bubble_hpp
 #define Bubble_hpp
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "AppSetting.hpp"
 
 #endif /* Bubble_hpp */
 
 // Settings
-static int kNotificateTime = 20;
 
 class Bubble {
-    
+
 public:
     Bubble();
     ~Bubble();
@@ -26,6 +28,8 @@ public:
     void setup(ofPixels pixels, ofVec2f pos, int id);
     void update();
     void draw();
+    int getCircleNum(int total, int index);
+    float getRate(int index);
     
     vector<ofVec2f> tigerPoints;
     vector<float> speeds;
@@ -37,7 +41,8 @@ public:
     vector<float> smallAmplitudes;
     vector<bool> noFills;
     vector<ofColor> colors;
-
+    
+    
     ofTrueTypeFont myFont;
 
     ofEvent<int> onReach;
@@ -45,5 +50,8 @@ public:
     bool didNotify;
     bool didDelete;
     int bubbleId;
-    int startTime;    
+    int startTime;
+    int burstPosition;
+    int loopDuration;
+    AppSetting *setting;
 };

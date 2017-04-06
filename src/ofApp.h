@@ -3,14 +3,9 @@
 #include "ofMain.h"
 #include "Bubble.hpp"
 #include "Timer.hpp"
+#include "AppSetting.hpp"
 
-// Settings
-static int kTimeCharaSpace = 0;
-static int kTimeBoundingBox = 380;
-static int kFontSize = 420;
-static int kDuration = 6500;
-
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 
 	public:
 		void setup();
@@ -24,7 +19,6 @@ class ofApp : public ofBaseApp{
     void onReach(int &bubbleId);
     void onDelete(int &bubbleId);
     
-    ofTrueTypeFont myFont;
     vector<ofVec2f> tigerPoints;
     vector<ofVec2f> speeds;
     vector<float> yPos;
@@ -32,9 +26,15 @@ class ofApp : public ofBaseApp{
     vector<vector<Bubble *>> timeBubbles;
     vector<Bubble> bubbles;
     vector<ofPixels> bubblePixels;
+    vector<ofImage>images;
     
     int speed;
+    int counter;
+    int fontSize;
+    ofTrueTypeFont myFont;
     Bubble bubble;
     Timer timer;
-    
+    ofImage bgImage;
+
+    AppSetting *setting;
 };

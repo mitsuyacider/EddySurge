@@ -9,6 +9,9 @@
 #include "Bubble.hpp"
 
 Bubble::Bubble() {
+    setting = &setting->sharedInstance();
+    burstPosition = setting->getValue("BurstPosition");
+    loopDuration = setting->getValue("loopDuration");
 }
 
 Bubble::~Bubble() {
@@ -43,16 +46,83 @@ Bubble::~Bubble() {
     smallAmplitudes.shrink_to_fit();
 }
 
+int Bubble::getCircleNum(int total, int index) {
+    /*
+    vector<int> counts;
+    for (int i = 0; i < 10; i++) {
+        int num = getRate(i) * total;
+        counts.push_back(num);
+    }
+    */
+    
+    int num = getRate(index) * total;
+    return num;
+}
+
+float Bubble::getRate(int index) {
+    float a = 1;
+    int x = index;
+    
+    float y = a * x * x + x + 2;
+    float sum = 0.0;
+    vector<int> counts;
+    for (int i = 0; i < 10; i++) {
+        y = a * i * i + i + 2;
+        sum += y;
+        counts.push_back(y);
+    }
+    
+    float rate = counts[x] / sum;
+//    printf("\nrate %f", rate);
+    return rate;
+}
+
 void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
     
-    for(int y = 0; y < pixels.getHeight(); y+=12) {
-        for(int x = 0; x < pixels.getWidth(); x+=12) {
+    int divide = 10;
+    int step = 12;
+    int total = (pixels.getHeight() / step) * (pixels.getWidth() / step);
+    int distance = total / divide;
+    
+    vector<int> counts;
+    int num = 1;
+    printf("\n***** total = %d", total);
+    for (int i = 0; i < divide; i++) {
+        int s = getCircleNum(total, i);
+        counts.push_back(s);
+    printf("\ns = %d", s);
+        num += distance;
+    }
+    printf("\n*****");
+    
+    std::vector<int> circleNum(divide, 0);
+    
+    for(int y = 0; y < pixels.getHeight(); y+=step) {
+        for(int x = 0; x < pixels.getWidth(); x+=step) {
             ofColor c = pixels.getColor(x, y);
             if (c == 255) {
                 tigerPoints.push_back(ofVec2f(x + ofRandom(-2, 2) + pos.x ,y + ofRandom(-2, 2)) + pos.y);
                 speeds.push_back(ofRandom(1.5, 1.6));
                 yPos.push_back(0);
+                
+                /*
+                int r = 1;
+                while(1) {
+                    r = ofRandom(1, divide);
+                    int cn = circleNum[r - 1];
+                    int size = counts[r - 1];
+                    cn++;
+                    
+                    if (cn <= size) {
+                        circleNum[r - 1] = cn;
+                        break;
+                    }
+                }
+                */
+                
                 radius.push_back(ofRandom(1, 5));
+                
+                
                 acceleration.push_back(ofRandom(0.01, 0.08));
                 wave.push_back(ofRandom(0, 360));
 
@@ -110,9 +180,35 @@ void Bubble::draw() {
         p.x = tigerPoints[i].x + sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp;
         p.y = tigerPoints[i].y - yPos[i] + ofGetHeight();
         
-        ofDrawCircle(p.x, p.y, radius[i], radius[i]);
         
-        if (yPos[i] > ofGetHeight() / 2) {
+        
+        
+        
+        
+        if (bubbleId == 0) {
+            ofDrawBitmapString("1", p.x, p.y);
+        } else if (bubbleId == 1) {
+            ofDrawBitmapString("2", p.x, p.y);
+        } else if (bubbleId == 2) {
+            ofDrawBitmapString(":", p.x, p.y);
+        } else if (bubbleId == 3) {
+            ofDrawBitmapString("3", p.x, p.y);
+        } else if (bubbleId == 4) {
+            ofDrawBitmapString("8", p.x, p.y);
+        }
+        
+//        ofDrawCircle(p.x, p.y, radius[i], radius[i]);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        if (yPos[i] > burstPosition) {
             yPos[i] += speeds[i] + acceleration[i] * timeCount;
         } else {
             yPos[i] += 1.5;
@@ -126,7 +222,7 @@ void Bubble::draw() {
         }
          */
         
-        if (timeCount > kNotificateTime && !didNotify) {
+        if (timeCount > loopDuration && !didNotify) {
             didNotify = true;
             // Notify
             ofNotifyEvent(onReach, bubbleId);
