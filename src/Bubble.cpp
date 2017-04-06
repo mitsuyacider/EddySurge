@@ -98,7 +98,15 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
     int total = (pixels.getHeight() / step) * (pixels.getWidth() / step);
     int minDispersion = setting->getValue<int>("MinDispersion");
     int maxDispersion = setting->getValue<int>("MaxDispersion");
-    float initialVelocity = setting->getValue<float>("InitialVelocity");
+    float minAcceleration = setting->getValue<float>("MinAcceleration");
+    float maxAcceleration = setting->getValue<float>("MaxAcceleration");
+    float minAmplitude = setting->getValue<float>("MinAmplitude");
+    float maxAmplitude = setting->getValue<float>("MaxAmplitude");
+    int minAlpha = setting->getValue<int>("MinAlpha");
+    int maxAlpha = setting->getValue<int>("MaxAlpha");
+    
+    initialVelocity = setting->getValue<float>("InitialVelocity");
+    
     int num = 1;
     
     vector<int> counts;
@@ -137,14 +145,14 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
             if (c == 255) {
                 // NOTE: If the current block pixel is text, add parameters to draw circle.
                 tigerPoints.push_back(ofVec2f(x + ofRandom(minDispersion, maxDispersion) + pos.x ,y + ofRandom(minDispersion, maxDispersion)) + pos.y);
-                speeds.push_back(ofRandom(1.5, 1.6));
+                speeds.push_back(ofRandom(initialVelocity, initialVelocity + 1));
                 radius.push_back(r);
-                acceleration.push_back(ofRandom(0.01, 0.08));
+                acceleration.push_back(ofRandom(minAcceleration, maxAcceleration));
                 
                 int w = ofRandom(0, 360);
                 wave.push_back(w);
 
-                float amp = ofRandom(0.5, 2);
+                float amp = ofRandom(minAmplitude, maxAmplitude);
                 smallAmplitudes.push_back(amp);
                 
                 float x = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + w) * amp;
@@ -155,7 +163,7 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
                 amplitude.push_back(amp);
                 noFills.push_back(true);
                 
-                int alpha = ofRandom(ofRandom(200, 255));
+                int alpha = ofRandom(ofRandom(minAlpha, maxAlpha));
                 ofColor color(255, 255, 255, alpha);
                 colors.push_back(color);
             }
@@ -194,9 +202,7 @@ void Bubble::draw() {
         ofSetColor(colors[i]);
         
         ofVec3f p;
-//        float amp = yPos[i] < ofGetHeight() / 2 ? smallAmplitudes[i] : amplitude[i];
         float amp = smallAmplitudes[i];
-//        p.x = tigerPoints[i].x + sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp;
         p.x = tigerPoints[i].x + xPos[i];
         p.y = tigerPoints[i].y - yPos[i] + ofGetHeight();
         
@@ -232,7 +238,7 @@ void Bubble::draw() {
             yPos[i] += speeds[i] + acceleration[i] * timeCount;
             xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp * acceleration[i] * timeCount;
         } else {
-            yPos[i] += 1.5;
+            yPos[i] += initialVelocity;
             xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp;
         }
         

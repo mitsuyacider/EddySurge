@@ -10,5 +10,10 @@
     <MinDispersion>-2</MinDispersion>
     <MaxDispersion>2</MaxDispersion>
     <InitialVelocity>1.5</InitialVelocity>
-
+    <MinAcceleration>0.01</MinAcceleration>
+    <MaxAcceleration>0.08</MaxAcceleration>
+    <MinAmplitude>0.5</MinAmplitude>
+    <MaxAmplitude>2.0</MaxAmplitude>
+    <MinAlpha>200</MinAlpha>
+    <MaxAlpha>255</MaxAlpha>
 </Setting>
