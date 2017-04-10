@@ -163,6 +163,8 @@ void BubbleController::createBubble(int bubbleId) {
     Bubble *b = new Bubble;
     b->setup(pixels, pos, bubbleId);
     b->cycloneMode = cycloneMode;
+    int rnd = ofRandom(0, 4);
+    b->burstPosition = setting->getArrayValue("BurstPositions")[rnd].asInt();
     ofAddListener(b->onReach,this, &BubbleController::onReach);
     ofAddListener(b->onDelete,this, &BubbleController::onDelete);
     
