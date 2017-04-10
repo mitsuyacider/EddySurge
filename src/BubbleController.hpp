@@ -54,4 +54,6 @@ public:
     ofImage bgImage;
     
     AppSetting *setting;
+    
+    bool cycloneMode;
 };

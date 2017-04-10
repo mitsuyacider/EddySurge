@@ -5,6 +5,7 @@
 #include "Timer.hpp"
 #include "AppSetting.hpp"
 #include "BubbleController.hpp"
+#include "SimplifiedImageDrawer.hpp"
 
 class ofApp : public ofBaseApp {
 
@@ -19,4 +20,5 @@ public:
 
     AppSetting *setting;
     BubbleController *bubbleController;
+    SimplifiedImageDrawer SID;
 };

@@ -10,6 +10,7 @@
 
 //--------------------------------------------------------------
 BubbleController::BubbleController() {
+    cycloneMode = false;
 }
 
 
@@ -24,24 +25,28 @@ void BubbleController::setup(ofVec2f pos) {
     setting = &setting->sharedInstance();
     fontSize = setting->getValue<int>("FontSize");
     
-    // Framerate
-    ofSetFrameRate(30);
-    
     // Font setting
     myFont.load("font/Arial Black.ttf",  fontSize, true, true, true, 0.3, 0);
     
     // Create pixels
     createTime();
+
+    initialPos = pos;
     
     // Create time
     int tiltDuration = setting->getValue<int>("TiltDuration");
-    timer.setup(tiltDuration, 4);
-    ofAddListener(timer.onCallbackTimer, this, &BubbleController::onCallbackTimer);
-    timer.fire();
-    
-    
-    initialPos = pos;
-    createBubble(0);
+    if (tiltDuration < 100) {
+        
+        for (int i = 0; i < 5; i++) {
+            createBubble(i);
+        }
+    } else {
+        timer.setup(tiltDuration, 4);
+        ofAddListener(timer.onCallbackTimer, this, &BubbleController::onCallbackTimer);
+        timer.fire();
+        
+        createBubble(0);
+    }    
 }
 
 
@@ -125,6 +130,9 @@ void BubbleController::onDelete(int &bubbleId) {
 void BubbleController::createBubble(int bubbleId) {
     string s;
     ofPixels pixels;
+    int colonMargin = setting->getValue<int>("ColonMargin");
+    
+    
     if (bubbleId == 0) {
         s = "1";
         pixels = bubblePixels[1];
@@ -149,11 +157,12 @@ void BubbleController::createBubble(int bubbleId) {
     pos.y += initialPos.y;
     
     if (bubbleId == 2) {
-        pos.x += 100;
+        pos.x += colonMargin;
     }
     
     Bubble *b = new Bubble;
     b->setup(pixels, pos, bubbleId);
+    b->cycloneMode = cycloneMode;
     ofAddListener(b->onReach,this, &BubbleController::onReach);
     ofAddListener(b->onDelete,this, &BubbleController::onDelete);
     

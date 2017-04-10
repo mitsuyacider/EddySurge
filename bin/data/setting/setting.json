@@ -1,0 +1,16 @@
+{
+    "TimeCharaBoundingBox": 380,
+    "FontSize": 420,
+    "TiltDuration": 0,
+    "BurstPosition": 540,
+    "LoopDuration": 16000,
+    "CircleDivision": 20,
+    "ReverseQuantity":true,
+    "GridSpace":12,
+    "DispersionRange": [-2, 2],
+    "InitialVelocity": [0, 3.5],
+    "AccelerationRange":[0.01, 0.05],
+    "AmplitudeRange": [0.5, 2.0],
+    "AlphaRange": [200, 255],
+    "ColonMargin":100
+  }

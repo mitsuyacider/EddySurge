@@ -51,6 +51,7 @@ public:
     bool didDelete;
     int bubbleId;
     int startTime;
+    int burstTime;
     int burstPosition;
     int loopDuration;
     int division;
@@ -58,5 +59,5 @@ public:
     float v0x;
     
     AppSetting *setting;
-    
+    bool cycloneMode;
 };

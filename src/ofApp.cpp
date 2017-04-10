@@ -4,12 +4,14 @@
 void ofApp::setup(){
     
     // Framerate
-    ofSetFrameRate(30);
+//    ofSetFrameRate(30);
 
     
     setting = &setting->sharedInstance();
-    bgImage.load("background/display_A_watch_00030.png");
+    
+    
     counter = 30;
+    loadImage();
     
     bubbleController = new BubbleController();
     bubbleController->setup(ofVec2f(0, ofGetHeight()));
@@ -25,6 +27,7 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackground(0, 0, 0);
     bgImage.draw(0, 0, 1920, 1080);
+    
     bubbleController->draw();
     
     // Draw frame rate for debug
@@ -44,10 +47,9 @@ void ofApp::loadImage() {
         fileName << counter;
     }
     
-    fileName << ".png";
+    fileName << ".jpg";
     
     bgImage.load(fileName.str());
-    
     counter++;
     
     if (counter > 360) {

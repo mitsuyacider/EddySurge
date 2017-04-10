@@ -65,7 +65,7 @@ void Bubble::createRates(int total) {
     
     vector<int> counts;
     for (int i = 1; i < division + 1; i++) {
-        y = a * i * i + i + 10;
+        y = a * i * i + i + 1;
         sum += y;
         
         if (i == division) {
@@ -77,7 +77,7 @@ void Bubble::createRates(int total) {
         rates.push_back(y);
     }
     
-    bool rev = setting->getBoolValue("ReverseQuantity");
+    bool rev = setting->getValue<bool>("ReverseQuantity");
     if (rev) {
         reverse(begin(rates), end(rates));
     }
@@ -96,17 +96,21 @@ int Bubble::getCircleNum(int total, int index) {
 void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
     int step = setting->getValue<int>("GridSpace");
     int total = (pixels.getHeight() / step) * (pixels.getWidth() / step);
-    int minDispersion = setting->getValue<int>("MinDispersion");
-    int maxDispersion = setting->getValue<int>("MaxDispersion");
-    float minAcceleration = setting->getValue<float>("MinAcceleration");
-    float maxAcceleration = setting->getValue<float>("MaxAcceleration");
-    float minAmplitude = setting->getValue<float>("MinAmplitude");
-    float maxAmplitude = setting->getValue<float>("MaxAmplitude");
-    int minAlpha = setting->getValue<int>("MinAlpha");
-    int maxAlpha = setting->getValue<int>("MaxAlpha");
     
-    v0x = setting->getValue<float>("InitialVelocityX");
-    v0y = setting->getValue<float>("InitialVelocityY");
+    int minDispersion = setting->getArrayValue("DispersionRange")[0].asInt();
+    int maxDispersion = setting->getArrayValue("DispersionRange")[1].asInt();
+    
+    float minAcceleration = setting->getArrayValue("AccelerationRange")[0].asFloat();
+    float maxAcceleration = setting->getArrayValue("AccelerationRange")[1].asFloat();
+    
+    float minAmplitude = setting->getArrayValue("AmplitudeRange")[0].asFloat();
+    float maxAmplitude = setting->getArrayValue("AmplitudeRange")[1].asFloat();
+    
+    int minAlpha = setting->getArrayValue("AlphaRange")[0].asInt();
+    int maxAlpha = setting->getArrayValue("AlphaRange")[1].asInt();
+    
+    v0x = setting->getArrayValue("InitialVelocity")[0].asFloat();
+    v0y = setting->getArrayValue("InitialVelocity")[1].asFloat();
     
     int num = 1;
     
@@ -131,7 +135,7 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
             // NOTE: Add circle for each block
              int r = 1;
              while(1) {
-                 r = ofRandom(1, division);
+                 r = ofRandom(1, division+1);
                  int cn = circleNum[r - 1];
                  int size = counts[r - 1];
                  cn++;
@@ -175,7 +179,7 @@ void Bubble::setup(ofPixels pixels, ofVec2f pos, int id) {
     didDelete = false;
     bubbleId = id;
     
-    startTime = ofGetElapsedTimeMillis() / 1000;
+    startTime = ofGetElapsedTimeMillis();
 }
 
 
@@ -190,7 +194,7 @@ void Bubble::draw() {
     ofPushStyle();
     
     int count = 0;
-    int timeCount = (ofGetElapsedTimeMillis() / 1000) - startTime;
+    int timeCount = (ofGetElapsedTimeMillis()) - startTime;
     
     for(int i = 0; i < particlePositions.size(); i++){
         
@@ -225,6 +229,15 @@ void Bubble::draw() {
         }
         */
         ofDrawCircle(p.x, p.y, radius[i], radius[i]);
+        if (cycloneMode) {
+            
+            
+            if (particlePositions[i].x < 0 - 100) {
+//                particlePositions[i].x = 288;
+            }
+//            particlePositions[i].x += v0x;
+            
+        }
         
         
         
@@ -236,11 +249,17 @@ void Bubble::draw() {
         
         // NOTE: Update bubble position
         if (yPos[i] > burstPosition) {
-            yPos[i] += speeds[i] + acceleration[i] * timeCount;
-            xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp * acceleration[i] * timeCount;
-        } else {
-            yPos[i] += v0y;
             xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp;
+            
+            // NOTE:
+            float t =  (ofGetElapsedTimeMillis() / 100) - burstTime;
+            float y = v0y + (1.0 / 1.0) * acceleration[i] * t;
+            yPos[i] += y;
+        } else {
+            xPos[i] = sin(ofDegToRad(ofGetElapsedTimeMillis() / 5) + wave[i]) * amp;
+            yPos[i] += v0y;
+            
+            burstTime = ofGetElapsedTimeMillis() / 100;
         }
         
         particlePositions[i].x += v0x;
@@ -252,8 +271,14 @@ void Bubble::draw() {
         }
         
         // Check if all bubble is out of boarder
-        if (p.y < 0) {
-            count++;
+        if (cycloneMode) {
+            if (p.x < 0) {
+                count++;
+            }
+        } else {
+            if (p.y < 0) {
+                count++;
+            }
         }
     }
     

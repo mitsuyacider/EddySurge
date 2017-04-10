@@ -1,20 +1,21 @@
 <Setting>
     <TimeCharaBoundingBox>380</TimeCharaBoundingBox>
     <FontSize>420</FontSize>
-    <TiltDuration>1500</TiltDuration>
+    <TiltDuration>100</TiltDuration>
     <BurstPosition>540</BurstPosition>
-    <LoopDuration>16</LoopDuration>
-    <CircleDivision>10</CircleDivision>
-    <ReverseQuantity>false</ReverseQuantity>
+    <LoopDuration>16000</LoopDuration>
+    <CircleDivision>20</CircleDivision>
+    <ReverseQuantity>true</ReverseQuantity>
     <GridSpace>12</GridSpace>
     <MinDispersion>-2</MinDispersion>
     <MaxDispersion>2</MaxDispersion>
     <InitialVelocityX>0</InitialVelocityX>
     <InitialVelocityY>3.5</InitialVelocityY>
     <MinAcceleration>0.01</MinAcceleration>
-    <MaxAcceleration>0.08</MaxAcceleration>
+    <MaxAcceleration>0.05</MaxAcceleration>
     <MinAmplitude>0.5</MinAmplitude>
     <MaxAmplitude>2.0</MaxAmplitude>
     <MinAlpha>200</MinAlpha>
     <MaxAlpha>255</MaxAlpha>
+    <ColonMargin>100</ColonMargin>
 </Setting>

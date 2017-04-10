@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "ofxJSON.h"
 
 #endif /* AppSetting_hpp */
 
@@ -36,6 +37,6 @@ public:
     }
     
     template <typename T> T getValue(string param);
-    bool getBoolValue(string param);
-    ofXml XML;
+    Json::Value getArrayValue(string param);
+    ofxJSONElement result;
 };
